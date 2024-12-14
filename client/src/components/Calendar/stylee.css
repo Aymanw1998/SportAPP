@@ -1,0 +1,61 @@
+/* עיצוב בסיסי */
+.calendar-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  
+  .calendar-container .rbc-calendar {
+    font-size: 16px;
+  }
+  
+  /* התאמות רספונסיביות למסכים קטנים */
+  @media (max-width: 768px) {
+    .calendar-container {
+      padding: 10px;
+    }
+  
+    .calendar-container .rbc-calendar {
+      font-size: 14px;
+    }
+  
+    .calendar-container .rbc-toolbar-label {
+      font-size: 16px;
+    }
+  
+    .calendar-container .rbc-event {
+      font-size: 12px;
+      padding: 3px;
+    }
+  
+    .rbc-month-view {
+      display: block;
+    }
+  
+    .rbc-month-row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  
+  /* התאמות רספונסיביות למסכים ממש קטנים (מכשירי מובייל) */
+  @media (max-width: 480px) {
+    .calendar-container .rbc-toolbar {
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+  
+    .calendar-container .rbc-toolbar button {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+  
+    .calendar-container .rbc-event {
+      font-size: 10px;
+    }
+  
+    .calendar-container {
+      padding: 5px;
+    }
+  }
+  

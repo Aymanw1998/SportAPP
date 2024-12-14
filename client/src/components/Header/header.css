@@ -1,0 +1,138 @@
+/* עיצוב כללי לכותרת */
+header {
+    background-color: #bcdfd6;
+    padding: 20px;
+    color: rgb(17, 15, 15);
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+/* שינוי בצל בעת גלילה */
+header.scrolled {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* כותרת */
+header h1 {
+    font-size: 50px;
+}
+
+/* רשימת הניווט */
+nav ul, nav div {
+    display: flex;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* יישור פריטים */
+.System {
+    display: flex;
+}
+
+.logoSystem {
+    width: 5%;
+}
+
+.nameSystem {
+    width: 30%;
+    margin: 0 auto;
+}
+
+/* פריטי תפריט */
+li {
+    margin-left: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+li:hover {
+    background-color: blue;
+    color: aliceblue;
+}
+
+li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* מחלקה פעילה */
+.chick, .active {
+    background-color: blue;
+    color: aliceblue;
+    font-size: large;
+    transition: transform 0.3s ease;
+}
+
+/* אפקט לחיצה */
+.chick:hover, .active:hover {
+    transform: scale(1.1);
+}
+
+/* יישור בין פריטים */
+.justify-between {
+    justify-content: space-between;
+}
+
+/* כפתור תפריט נפתח */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* תפריט רספונסיבי */
+@media (max-width: 768px) {
+    header {
+        padding: 10px;
+        flex-direction: column;
+    }
+
+    nav ul {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #bcdfd6;
+        padding: 10px;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    li {
+        margin-left: 0;
+        margin-bottom: 15px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+
+/* שינויים למסכים קטנים */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 24px;
+    }
+
+    .logoSystem {
+        width: 15%;
+    }
+
+    .nameSystem {
+        width: 80%;
+    }
+}
