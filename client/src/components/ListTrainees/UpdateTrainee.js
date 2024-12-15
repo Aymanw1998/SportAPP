@@ -18,7 +18,7 @@ const UpdateTrainee = ({id, fetchTrainees}) => {
     });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  console.log("id", id)
+  // console.log("id", id)
   useEffect(() => {
     // שליפת נתונים מהשרת
     const fetchUserProfile = async () => {
@@ -54,7 +54,7 @@ const UpdateTrainee = ({id, fetchTrainees}) => {
       // setInterval(()=>navigate("/dashboard"),2000);
     } catch (err) {
       setSuccessMessage('')
-      console.log(err);
+      // console.log(err);
       setErrorMessage(err.response?.data?.message || 'שגיאה בעדכון משתמש.');
     }
     fetchTrainees();

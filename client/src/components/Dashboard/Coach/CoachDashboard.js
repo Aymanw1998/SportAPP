@@ -4,9 +4,10 @@ import { apiService } from '../../../api/apiService';
 
 const CoachDashboard = () => {
   const [me, setMe] = useState();
-  useEffect(()=>console.log("me", me),[me]);
+  useEffect(()=>console.log("me"),[me]);
 
   const ftechMe = async () => {
+    
     try {
       const me = await apiService.get('/auth/me', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },

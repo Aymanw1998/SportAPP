@@ -25,7 +25,7 @@ const CreateTrainee = ({fetchTrainees}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        //console.log(localStorage.getItem('token'), localStorage.getItem('role'))
+      
       const response = await apiService.post('/auth/create-trainee', formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });

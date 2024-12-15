@@ -4,7 +4,7 @@ import { apiService } from '../../../api/apiService';
 
 const TraineeDashboard = () => {
   const [me, setMe] = useState();
-  useEffect(()=>console.log("me", me),[me]);
+  useEffect(()=>console.log("me"),[me]);
 
   const ftechMe = async () => {
     try {

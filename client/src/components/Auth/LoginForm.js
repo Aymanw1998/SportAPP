@@ -4,24 +4,30 @@ import { Box, Button, TextField, Typography,Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = ({ onLogin }) => {
-    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+  
+
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(()=>{
+    console.log("Environment Variables:", process.env.URL_SERVER);
     if(localStorage.getItem("token") && localStorage.getItem("role")){
         navigate("/dashboard")
     }
   },[])
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     setError('');
     try {
-        //console.log(username, password)
+      
+        // console.log(username, password)
       const { data } = await apiService.post('/auth/login', { username, password });
-      //console.log("user:", data)
+      // console.log("user:", data)
       const { token, role, id } = data;
       //console.log(token,role)
       localStorage.setItem('token', token);
@@ -31,8 +37,10 @@ const LoginForm = ({ onLogin }) => {
       await onLogin(role);
       navigate("/dashboard")
     } catch (err) {
-        console.error(err);
+      console.error(err);
       setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setIsLoading(false); // סיום טעינה
     }
   };
 

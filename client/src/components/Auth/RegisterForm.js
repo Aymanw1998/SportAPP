@@ -3,6 +3,7 @@ import { apiService, setAuthToken} from '../../api/apiService';
 import { Box, Button, TextField, Typography, Link, } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 const RegisterForm = ({onLogin}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fn: '',
@@ -21,7 +22,7 @@ const RegisterForm = ({onLogin}) => {
   };
 
   const handleSubmit = async (e) => {
-
+    setIsLoading(true);
     e.preventDefault();
     setError('');
     try {
@@ -52,10 +53,14 @@ const RegisterForm = ({onLogin}) => {
         } catch (err) {
           console.error(err);
           setError(err.response?.data?.message || 'Login failed');
+         } finally {
+          setIsLoading(false); // סיום טעינה
         }
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
-    }
+  } finally {
+    setIsLoading(false); // סיום טעינה
+  }
   };
 
   return (

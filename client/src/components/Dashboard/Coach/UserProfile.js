@@ -55,7 +55,7 @@ const UserProfile = () => {
             alert('מספר טלפון לא תקין');
             return;
         }
-        console.log("token:", localStorage.getItem('token'))
+        // console.log("token:", localStorage.getItem('token'))
       const res = await apiService.put(
         '/auth/me',
         { ...formData },

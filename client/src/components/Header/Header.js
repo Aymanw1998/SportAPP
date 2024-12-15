@@ -14,7 +14,7 @@ const Header = ({ onLogout }) => {
         { name: "פגישות", iconClose: <CalendarClearOutline color={'#00000'} height="20px" width="20px" />, url: "/calendar" },
     ];
 
-    useEffect(()=>{console.log(window.location)},[window.location])
+    useEffect(()=>{console.log("window.location")},[window.location])
     useEffect(() => {
         // מזהה גלילה ומעדכן את המחלקה
         const handleScroll = () => {

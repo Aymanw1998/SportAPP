@@ -46,17 +46,17 @@ const customMessages = {
 const CalendarBooking = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]); // רשימת הפגישות
-  useEffect(()=>console.log("events", events), [events]);
+  useEffect(()=>console.log("events"), [events]);
   const [blockedEvents,setBlockedEvents] = useState([]);
-  useEffect(()=>console.log("blockedEvents", blockedEvents), [blockedEvents]);
+  useEffect(()=>console.log("blockedEvents"), [blockedEvents]);
   const [coaches, setCoaches] = useState([]); // רשימת המאמנים
-  useEffect(()=>console.log("coaches", coaches), [coaches]);
+  useEffect(()=>console.log("coaches"), [coaches]);
   const [trainees, setTrainees] = useState([]); // רשימת המתאמנים
-  useEffect(()=>console.log("trainees", trainees), [trainees]);
+  useEffect(()=>console.log("trainees"), [trainees]);
   const [showModal, setShowModal] = useState(false); // פתיחת מודאל
-  useEffect(()=>console.log("showModal", showModal), [showModal]);
+  useEffect(()=>console.log("showModal"), [showModal]);
   const [currentEvent, setCurrentEvent] = useState(null); // פגישה שנבחרה
-  useEffect(()=>console.log("currentEvent", currentEvent), [currentEvent]);
+  useEffect(()=>console.log("currentEvent"), [currentEvent]);
   const [formData, setFormData] = useState({
     title: "",
     start: "",
@@ -68,10 +68,10 @@ const CalendarBooking = () => {
   });
 
   const checkOverlap = (selectedStart, selectedEnd, existingEvents) => {
-    console.log("strat", selectedStart);
-    console.log("end", selectedEnd);
-    console.log("list", existingEvents);
-    // בודק אם הפגישה שנבחרה חופפת לפגישה קיימת
+    // console.log("strat", selectedStart);
+    // console.log("end", selectedEnd);
+    // console.log("list", existingEvents);
+    // // בודק אם הפגישה שנבחרה חופפת לפגישה קיימת
     return existingEvents.some((event) => {
         const eventStart = new Date(event.start);
         const eventEnd = new Date(event.end);
@@ -81,7 +81,7 @@ const CalendarBooking = () => {
     });
 };
   useEffect(()=>{
-    console.log("formData", formData)
+    // console.log("formData", formData)
     }, [formData]);
   
   const fetchData = async () => {
@@ -138,7 +138,7 @@ const CalendarBooking = () => {
             isGroup: new Boolean(event.isGroup || false),  
           }))
         );
-        console.log("myCoachEventRes", myCoachEventRes.data);
+        // console.log("myCoachEventRes", myCoachEventRes.data);
         const myCoachEvents = myCoachEventRes.data;
         setCoaches(coachesRes.data);
         setTrainees([traineesRes.data]);
@@ -207,7 +207,7 @@ useEffect(() => {fetchData();}, []);
     try {
       if (currentEvent) {
         // עדכון פגישה קיימת
-        console.log("sssss", formData)
+        // console.log("sssss", formData)
         if(formData._id != currentEvent._id && checkOverlap(new Date(formData.start), new Date(formData.end), [...blockedEvents, ...events])){
           return alert("הזמן הנבחר חופף לאימון אחר");
         }
@@ -227,7 +227,7 @@ useEffect(() => {fetchData();}, []);
           maximum: new Number(res.data.maximum || 2),
           isGroup: new Boolean(res.data.isGroup || false),
         }
-        console.log("res.data",res.data)
+        // console.log("res.data",res.data)
         setEvents(events.map((e) => (e._id === currentEvent._id ? eventObj : e)));
       } else {
         //console.log("save event",formData);
@@ -265,17 +265,21 @@ useEffect(() => {fetchData();}, []);
   };
   
   const deleteEvent = async () => {
+    setIsLoading(true);
     try {
       await apiService.delete(`/appointments/${currentEvent._id}`,{
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });
       setEvents(events.filter((e) => e._id !== currentEvent._id));
-      closeModal();
+      // closeModal();
     } catch (err) {
       console.error("Error deleting event:", err);
       alert("Error deleting event");
+    } finally {
+      closeModal();
+      setIsLoading(false); // סיום טעינה
     }
-    closeModal();
+    
   };
 
   const eventStyleGetter = (event) => {
