@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { apiService, setAuthToken} from '../../api/apiService';
 import { Box, Button, TextField, Typography, Link, } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 const RegisterForm = ({onLogin}) => {
   const [isLoading, setIsLoading] = useState(false);
+  useEffect(()=>{console.log("isLoading registerForm", isLoading)},[isLoading])
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fn: '',
@@ -26,8 +27,8 @@ const RegisterForm = ({onLogin}) => {
     e.preventDefault();
     setError('');
     try {
-      if(formData.fn.length == 0 || formData.ln.length == 0 || formData.username.length == 0 || formData.password.length == 0
-        || formData.birthday.length == 0 || formData.phoneNumber.length == 0)
+      if(formData.fn.length === 0 || formData.ln.length === 0 || formData.username.length === 0 || formData.password.length === 0
+        || formData.birthday.length === 0 || formData.phoneNumber.length === 0)
         {setError("אחד מהשדות ריק"); return;}
   
         // אימות שהמספר תואם לפורמט של טלפון ישראלי
@@ -38,15 +39,18 @@ const RegisterForm = ({onLogin}) => {
             alert('מספר טלפון לא תקין');
             return;
         }
-        //console.log("formData for register", formData);
+        console.log("formData for register", formData);
       await apiService.post('/auth/register', formData);
       alert('Registration successful!');
         try {
+          
           const { data } = await apiService.post('/auth/login', { username: formData.username, password: formData.password });
-          const { token, role, id } = data;
+          const { token, role, id, username, fn, ln } = data;
           localStorage.setItem('token', token);
           localStorage.setItem('role', role);
           localStorage.setItem('id', id);
+          localStorage.setItem('username', username);
+          localStorage.setItem('name', fn + " " + ln);
           setAuthToken(token);
           await onLogin(role);
           navigate("/dashboard")
@@ -145,9 +149,16 @@ const RegisterForm = ({onLogin}) => {
         sx={{ marginBottom: '15px' }}
       />
       {error && <Typography color="error" sx={{ marginBottom: '10px' }}>{error}</Typography>}
-      <Button fullWidth type="submit" variant="contained" color="primary">
+      { !isLoading ? 
+        <Button fullWidth type="submit" variant="contained" color="primary">
         יצירה
+      </Button> : 
+      <Button fullWidth type="submit" variant="contained" color="primary">
+        <div class="spinner-border" role="status">
+          
+        </div>
       </Button>
+      }
       <Typography variant="h5" sx={{ textAlign: 'center', margin: '20px' }}>
         ***************************
       </Typography>

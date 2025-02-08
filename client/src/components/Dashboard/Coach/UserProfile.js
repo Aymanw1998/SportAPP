@@ -20,9 +20,7 @@ const UserProfile = () => {
     // שליפת נתונים מהשרת
     const fetchUserProfile = async () => {
       try {
-        const response = await apiService.get('/auth/me', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
+        const response = await apiService.get('/auth/me');
         //console.log(response.data);
         setFormData(response.data);
       } catch (error) {
@@ -34,10 +32,7 @@ const UserProfile = () => {
 
   const deleteUser = async () => {
     try {
-        const res = await apiService.delete(
-        '/auth/',
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+        const res = await apiService.delete('/auth/');
       alert('הפרופיל נמחק!');
       
     } catch (error) {
@@ -56,11 +51,7 @@ const UserProfile = () => {
             return;
         }
         // console.log("token:", localStorage.getItem('token'))
-      const res = await apiService.put(
-        '/auth/me',
-        { ...formData },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+      const res = await apiService.put('/auth/me',{ ...formData });
       setFormData(res.data);
       setIsLocked(true);
       alert('הפרופיל נשמר בהצלחה!');

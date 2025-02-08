@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 // import { TextField, Button, Typography, Alert } from '@mui/material';
 import { apiService } from '../../api/apiService';
-import { useNavigate } from 'react-router-dom';
-import { Box, Button, TextField, Typography, MenuItem, Select, InputLabel } from '@mui/material';
+// import { useNavigate } from 'react-router-dom';
+import { Box, Button, TextField, Typography, MenuItem, Select } from '@mui/material';
 
 const UpdateTrainee = ({id, fetchTrainees}) => {
-    const navigate = useNavigate();
     const [formData, setFormData] = useState({
       _id: '',
       fn: '',
@@ -16,24 +15,21 @@ const UpdateTrainee = ({id, fetchTrainees}) => {
       phoneNumber: '',
       maxMeetingsPerWeek: '',
     });
-  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   // console.log("id", id)
   useEffect(() => {
     // שליפת נתונים מהשרת
     const fetchUserProfile = async () => {
       try {
-        const response = await apiService.get('/auth/myTrainee', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
-        //console.log(response.data.filter(t => t._id == id)[0]);
-        setFormData(response.data.filter(t => t._id == id)[0]);
+        const response = await apiService.get('/auth/myTrainee');
+        //console.log(response.data.filter(t => t._id === id)[0]);
+        setFormData(response.data.filter(t => t._id === id)[0]);
       } catch (error) {
         console.error('Error fetching profile data', error);
       }
     };
     fetchUserProfile();
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,9 +39,7 @@ const UpdateTrainee = ({id, fetchTrainees}) => {
     e.preventDefault();
     try {
         //console.log(localStorage.getItem('token'), localStorage.getItem('role'))
-      const response = await apiService.put('/auth/myTrainee', formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const response = await apiService.put('/auth/myTrainee', formData);
       setErrorMessage('');
       setFormData({ 
         ...response.data,
@@ -53,8 +47,6 @@ const UpdateTrainee = ({id, fetchTrainees}) => {
       });
       // setInterval(()=>navigate("/dashboard"),2000);
     } catch (err) {
-      setSuccessMessage('')
-      // console.log(err);
       setErrorMessage(err.response?.data?.message || 'שגיאה בעדכון משתמש.');
     }
     fetchTrainees();

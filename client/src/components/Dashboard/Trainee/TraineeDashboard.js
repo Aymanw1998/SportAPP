@@ -6,11 +6,9 @@ const TraineeDashboard = () => {
   const [me, setMe] = useState();
   useEffect(()=>console.log("me"),[me]);
 
-  const ftechMe = async () => {
+  const fetchMe = async () => {
     try {
-      const me = await apiService.get('/auth/me', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const me = await apiService.get('/auth/me');
       setMe(me.data);
     } catch (err) {
       console.error('Error fetching me:', err);
@@ -18,7 +16,7 @@ const TraineeDashboard = () => {
   };
 
   useEffect(() => {
-    ftechMe();
+    fetchMe();
   }, []);
 
 

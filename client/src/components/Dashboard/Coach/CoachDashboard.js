@@ -4,14 +4,12 @@ import { apiService } from '../../../api/apiService';
 
 const CoachDashboard = () => {
   const [me, setMe] = useState();
-  useEffect(()=>console.log("me"),[me]);
+  useEffect(()=>console.log("me", me),[me]);
 
-  const ftechMe = async () => {
+  const fetchMe = async () => {
     
     try {
-      const me = await apiService.get('/auth/me', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
+      const me = await apiService.get('/auth/me');
       setMe(me.data);
     } catch (err) {
       console.error('Error fetching me:', err);
@@ -19,7 +17,7 @@ const CoachDashboard = () => {
   };
 
   useEffect(() => {
-    ftechMe();
+    fetchMe();
   }, []);
 
 

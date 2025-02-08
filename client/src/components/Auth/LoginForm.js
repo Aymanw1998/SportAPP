@@ -8,7 +8,7 @@ const LoginForm = ({ onLogin }) => {
   
 
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [usernameT, setUsernameT] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -26,13 +26,15 @@ const LoginForm = ({ onLogin }) => {
     try {
       
         // console.log(username, password)
-      const { data } = await apiService.post('/auth/login', { username, password });
+      const { data } = await apiService.post('/auth/login', { username:usernameT, password });
       // console.log("user:", data)
-      const { token, role, id } = data;
+      const { token, role, id, username, fn, ln } = data;
       //console.log(token,role)
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
       localStorage.setItem('id', id);
+      localStorage.setItem('username', username);
+      localStorage.setItem('name', fn + " " + ln);
       setAuthToken(token);
       await onLogin(role);
       navigate("/dashboard")
@@ -65,8 +67,8 @@ const LoginForm = ({ onLogin }) => {
         fullWidth
         type="text"
         label="שם משתמש"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={usernameT}
+        onChange={(e) => setUsernameT(e.target.value)}
         sx={{ marginBottom: '15px' }}
       />
       <TextField

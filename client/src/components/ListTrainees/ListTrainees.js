@@ -16,9 +16,7 @@ const ListTrainees = () => {
     // פונקציה למשיכת נתוני המתאמנים מהשרת
     const fetchTrainees = async () => {
         try {
-            const response = await apiService.get('/auth/myTrainee', {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-            });
+            const response = await apiService.get('/auth/myTrainee');
             const filteredTrainees = Array.isArray(response.data)
                 ? response.data.filter(user => user.role === 'trainee')
                 : [];
@@ -79,20 +77,18 @@ const ListTrainees = () => {
                 <tbody>
                     {filteredTrainees.map((t, i) => (
                         <tr key={t._id}>
-                            <td>{t.username}</td>
-                            <td>{t.fn}</td>
-                            <td>{t.ln}</td>
-                            <td>{moment(new Date(t.birthday)).format("DD/MM/YYYY")}</td>
-                            <td>{t.phoneNumber}</td>
+                            <td data-th="שם משתמש">{t.username}</td>
+                            <td data-th="שם פרטי">{t.fn}</td>
+                            <td data-th="שם משפחה">{t.ln}</td>
+                            <td data-th="תאריך לידה">{moment(new Date(t.birthday)).format("DD/MM/YYYY")}</td>
+                            <td data-th="מספר טלפון">{t.phoneNumber}</td>
                             <td className='same-line'>
                                 <ul className="flex relative">
                                     <Trash
                                         className="toClick"
                                         size={20}
                                         onClick={async () => {
-                                            await apiService.delete(`auth/myTrainee/${t._id}`, {
-                                                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                                            });
+                                            await apiService.delete(`auth/myTrainee/${t._id}`);
                                             fetchTrainees();
                                         }}
                                     />

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CalendarClearOutline, LogOutOutline, HappyOutline, PeopleOutline, HomeOutline } from 'react-ionicons';
 import "./header.css";
 import { useNavigate } from 'react-router-dom';
+// import { apiService } from '../../api/apiService';
 
 const Header = ({ onLogout }) => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -9,12 +10,26 @@ const Header = ({ onLogout }) => {
     const navigate = useNavigate();
 
     const Menus = [
-        { name: "בית", iconClose: <HomeOutline color={'#00000'} height="20px" width="20px" />, url: "/dashboard" },
-        { name: "מתאמנים", iconClose: <PeopleOutline color={'#00000'} height="20px" width="20px" />, url: "/trainees" },
-        { name: "פגישות", iconClose: <CalendarClearOutline color={'#00000'} height="20px" width="20px" />, url: "/calendar" },
+        { name: "בית", iconClose: <HomeOutline color="#000000" height="20px" width="20px" />, url: "/dashboard" },
+        { name: "מתאמנים", iconClose: <PeopleOutline color="#00000" height="20px" width="20px"/>, url: "/trainees" },
+        { name: "פגישות", iconClose: <CalendarClearOutline color= "#00000" width= "20px" height= "20px"/>, url: "/calendar" },
     ];
 
-    useEffect(()=>{console.log("window.location")},[window.location])
+    useEffect(()=>{
+        console.log("token: ", localStorage.getItem('token'));
+        console.log("role: ", localStorage.getItem("role"));
+        console.log("id: ", localStorage.getItem("id"));
+
+        if(!localStorage.getItem('token')){
+          onLogout();
+        }
+        else{
+          if(window.location.pathname === "/") {
+            navigate("dashboard");
+          }
+          else navigate(window.location.pathname)
+        }
+      }, [])
     useEffect(() => {
         // מזהה גלילה ומעדכן את המחלקה
         const handleScroll = () => {
@@ -31,11 +46,6 @@ const Header = ({ onLogout }) => {
 
     return (
         <header className={scrolled ? 'scrolled' : ''}>
-            <div className='System'>
-                {/* <img className="logoSystem" src={IconSystem} alt="LOGO SYSTEM" /> */}
-                {/* <img className="nameSystem" src={NameSystem} alt="NAME SYSTEM" /> */}
-                {/* <h1>מערכת אימונים</h1> */}
-            </div>
             <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>☰</button>
             <nav>
                 <ul className={menuOpen ? 'active' : ''}>
@@ -43,7 +53,7 @@ const Header = ({ onLogout }) => {
                         ((menu.url === '/trainees' && localStorage.getItem("role") === "coach") || menu.url !== '/trainees') &&
                         <li key={i} onClick={() => { setMenuOpen(false); navigate(menu.url); }}>
                             <a>
-                                <span>{menu.iconClose}</span>
+                                {menu.iconClose}
                                 <span>{menu.name}</span>
                             </a>
                         </li>
@@ -56,6 +66,8 @@ const Header = ({ onLogout }) => {
                         <span>{<LogOutOutline color={'red'} height="20px" width="20px" />}</span>
                         <span>יציאה</span>
                     </li>
+
+                    <div style={{display: "flex", justifyContent: "space-between"}}>{localStorage.getItem("name")} -- {localStorage.getItem("username")}</div>
                 </ul>
             </nav>
         </header>

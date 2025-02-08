@@ -23,7 +23,7 @@ const my = async (req, res) =>{
     console.log();
     console.log();
     console.log("*********Start get My Events*************");
-    if(req.user.role == "coach"){
+    if(req.user.role === "coach"){
         try{
             const list = await Event.find({coachId: req.user._id});
             console.log("*********End get My Events - Success*************");
@@ -34,7 +34,7 @@ const my = async (req, res) =>{
             return res.status(404).json({message:err.message});
         }
     }
-    if(req.user.role == "trainee"){
+    if(req.user.role === "trainee"){
         try{
         const list = await Event.find({traineesId: req.user._id});
         console.log("*********End get My Events - Success*************");
@@ -72,11 +72,11 @@ const createEvent = async (req, res) => {
     console.log("*********Start createEvent*************");
     let {title, start, end, coachId, traineesId, maximum } = req.body;
     console.log(req.body);
-    if(req.user.role == "coach") coachId = req.user._id
-    if(req.user.role == "trainee") traineesId = req.user._id
+    if(req.user.role === "coach") coachId = req.user._id
+    if(req.user.role === "trainee") traineesId = req.user._id
     if (await isOverlapping(start, end, coachId)) return res.status(400).json({ message: "Time slot is already taken" });
     console.log("create event");
-    if(req.user.role == "trainee"){
+    if(req.user.role === "trainee"){
         // מציאת תחילת וסוף השבוע
         const startOfWeek = moment(start).startOf('week').toDate();
         const endOfWeek = moment(start).endOf('week').toDate();
@@ -123,8 +123,10 @@ const createEvent = async (req, res) => {
 const updateEvent  = async (req, res) => {
     console.log("*********start updateEvent*************");
     const { title, start, end, coachId, traineesId,maximum } = req.body;
+    console.log(start, end);
     if (await isOverlapping(start, end, coachId, req.params.id)) {
-        console.log("*********End updateEvent - Success*************");
+        console.log("ERROR")
+        console.log("*********End updateEvent - SuccessW*************");
         return res.status(400).json({ message: "Time slot is already taken" });
     }
     try {
@@ -137,6 +139,8 @@ const updateEvent  = async (req, res) => {
         end: new Date(end),
         updateBy: req.user.role,
         } , { new: true });
+
+        console.log("GOOD", updatedEvent, title, start, end, coachId, traineesId,maximum)
         console.log("*********End updateEvent - Success*************");
         return res.status(200).json(updatedEvent);
     } catch (err) {
@@ -160,5 +164,18 @@ const deleteE = async (req, res) => {
     }
 };
 
+const deleteAllE = async (req, res) => {
+    try {
+        console.log("*********Satrt deleteAllEvent*************");
+        const deletedEvent = await Event.deleteMany({ end: { $lt: new Date() } });
+        if (!deletedEvent) return res.status(404).json({ message: "Event not found" });
+        console.log("*********End deleteAllEvent - Success*************");
+        return res.status(200).json({ message: "Event deleted successfully" });
+    } catch (err) {
+        console.error(err);
+        console.log("*********End deleteAllEvent - Error*************");
+        return res.status(400).json({ message: err.message });
+    }
+};
 
-module.exports = {my, available, createEvent, updateEvent, deleteE};
+module.exports = {my, available, createEvent, updateEvent, deleteE, deleteAllE};

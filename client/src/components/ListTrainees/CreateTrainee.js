@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 // import { TextField, Button, Typography, Alert } from '@mui/material';
 import { apiService } from '../../api/apiService';
-import { useNavigate } from 'react-router-dom';
-import { Box, Button, TextField, Typography, MenuItem, Select, InputLabel } from '@mui/material';
+// import { useNavigate } from 'react-router-dom';
+import { Box, Button, TextField, Typography, MenuItem, Select } from '@mui/material';
 
 const CreateTrainee = ({fetchTrainees}) => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [formData, setFormData] = useState({
       fn: '',
       ln: '',
@@ -15,7 +15,6 @@ const CreateTrainee = ({fetchTrainees}) => {
       phoneNumber: '',
       maxMeetingsPerWeek: '',
     });
-  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const handleChange = (e) => {
@@ -26,10 +25,8 @@ const CreateTrainee = ({fetchTrainees}) => {
     e.preventDefault();
     try {
       
-      const response = await apiService.post('/auth/create-trainee', formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
-      setSuccessMessage(response.data.message);
+      await apiService.post('/auth/create-trainee', formData);
+
       setErrorMessage('');
       setFormData({ fn: '',
         ln: '',
@@ -42,7 +39,6 @@ const CreateTrainee = ({fetchTrainees}) => {
       });
       // setInterval(()=>navigate("/dashboard"),2000);
     } catch (err) {
-      setSuccessMessage('')
       setErrorMessage(err.response?.data?.message || 'שגיאה ביצירת משתמש.');
     }
     fetchTrainees()

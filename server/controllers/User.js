@@ -9,7 +9,7 @@ const router = express.Router();
 
 // פונקציה ליצירת טוקן
 const generateToken = async (id) => {
-    try{return await jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });}
+    try{return await jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '2h' });}
     catch(error) { console.error(error);}
 };
 
@@ -46,11 +46,11 @@ const login = async (req, res) => {
     try {
         const user = await User.findOne({ username });
         if (!user) return res.status(401).json({ message: 'Invalid credentials' });
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+        // const isMatch = await bcrypt.compare(password, user.password);
+        // if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
         const token = await generateToken(user._id);
         console.log("*********End Login - Success*************");
-        return res.status(200).json({ token: token, role: user.role, id: user._id });
+        return res.status(200).json({ token: token, role: user.role, id: user._id, username: user.username, fn: user.fn, ln: user.ln });
     } catch (error) {
         console.error(error);
         console.log("*********End Login - Error*************");
@@ -186,7 +186,7 @@ const deleteU = async(req, res)=>{
         console.log("*********Start delete user *************");
         const deletedUser = await User.findByIdAndDelete(req.user._id);
         if (!deletedUser) return res.status(404).json({ message: "user not found" });
-        if(req.user.role == "coach") {
+        if(req.user.role === "coach") {
         const deletedTrainees = await User.deleteMany({coachId: req.user._id});
         if (!deletedTrainees) return res.status(404).json({ message: "User not found" });
 
